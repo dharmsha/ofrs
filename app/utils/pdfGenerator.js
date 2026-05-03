@@ -36,6 +36,7 @@ export const generatePDF = async (formData) => {
   };
 
   const logoImage = await loadImage('/cm.png');
+  // HR Digital Signature - Rani Shreya (Auto included)
   const hrSignature = await loadImage('/hrs-ign.jpeg');
 
   // --- MODIFIED PREMIUM HEADER ---
@@ -66,7 +67,7 @@ export const generatePDF = async (formData) => {
     doc.setFontSize(8.5);
     doc.setFont('helvetica', 'normal');
     doc.text('1st Floor, Siyaram Mansion, Opp. Telephone Exchange', infoX, 27);
-    doc.text('Near P&M Mall, Khurji, Patna, Bihar – 800024', infoX, 32);
+    doc.text('Near P&M Mall, Khurji, Patna, Bihar – 800010', infoX, 32);
     
     // 6. Contact Information Bar (Subtle White Highlight)
     doc.setFont('helvetica', 'bold');
@@ -85,7 +86,7 @@ export const generatePDF = async (formData) => {
 
   let yPosition = addHeader();
 
-  // --- REST OF THE CONTENT (AS REQUESTED) ---
+  // --- REST OF THE CONTENT ---
   
   // Document Title
   doc.setFontSize(20);
@@ -142,7 +143,7 @@ export const generatePDF = async (formData) => {
     ['Designation', formData.designation],
     ['Work Location', formData.workLocation],
     ['Probation', formData.probationPeriod || '3 Months'],
-    ['Notice Period', '1 Month'], 
+    ['Notice Period', formData.noticePeriod || '1 Month'], 
     ['Working Hours', '10:00 AM - 07:00 PM'],
     ['Working Days', 'Tuesday to Sunday']
   ];
@@ -161,23 +162,38 @@ export const generatePDF = async (formData) => {
 
   yPosition += 45;
 
-  // Signature Section
+  // ==============================================
+  // DIGITAL SIGNATURE SECTION - RANI SHREYA (HR)
+  // ==============================================
   doc.setFont('helvetica', 'bold');
   doc.text('For VATS CREATIVE DIGITAL SOLUTIONS PVT. LTD.', margin, yPosition);
   
+  // Digital Signature of Rani Shreya (HR Department)
   if (hrSignature) {
-    doc.addImage(hrSignature, 'PNG', margin + 5, yPosition + 2, 45, 18);
+    doc.addImage(hrSignature, 'PNG', margin + 5, yPosition + 2, 50, 20);
+  } else {
+    // Fallback text signature if image not available
+    doc.setFont('helvetica', 'italic');
+    doc.setFontSize(11);
+    // doc.text('Rani Shreya', margin + 5, yPosition + 12);
+    // doc.setFont('helvetica', 'normal');
+    // doc.setFontSize(9);
+    // doc.text('(Digitally Signed)', margin + 5, yPosition + 18);
   }
   
-  yPosition += 25; 
+  yPosition += 28; 
   doc.setFont('helvetica', 'bold');
-  doc.text('Authorized Signatory', margin, yPosition);
+  doc.setFontSize(11);
+  doc.text('Rani Shreya', margin, yPosition);
   doc.setFontSize(9);
   doc.setFont('helvetica', 'normal');
-  doc.text('Human Resources Department', margin, yPosition + 5);
+  doc.text('HR Manager - Human Resources Department', margin, yPosition + 5);
+  doc.setFontSize(8);
+  doc.setTextColor(100, 100, 100);
+  doc.text('(Digitally Authorized Signature)', margin, yPosition + 10);
 
-  // Acceptance Box
-  yPosition += 18;
+  // Acceptance Box for Candidate
+  yPosition += 22;
   doc.setFillColor(250, 250, 250);
   doc.rect(margin, yPosition, maxWidth, 30, 'F');
   doc.setDrawColor(colors.border[0], colors.border[1], colors.border[2]);
@@ -185,11 +201,14 @@ export const generatePDF = async (formData) => {
 
   doc.setFontSize(9);
   doc.setFont('helvetica', 'bold');
-//   doc.text('DECLARATION & ACCEPTANCE', margin + 5, yPosition + 7);
+  doc.setTextColor(colors.textDark[0], colors.textDark[1], colors.textDark[2]);
+  doc.text('DECLARATION & ACCEPTANCE', margin + 5, yPosition + 7);
   doc.setFont('helvetica', 'normal');
+  doc.setFontSize(8);
+  doc.text('I accept the above offer and agree to the terms and conditions.', margin + 5, yPosition + 14);
 
   doc.line(margin + 5, yPosition + 23, margin + 60, yPosition + 23);
-  doc.text('Signature & Date', margin + 5, yPosition + 27);
+  doc.text('Candidate Signature & Date', margin + 5, yPosition + 27);
 
   // Footer
   doc.setFontSize(8);
