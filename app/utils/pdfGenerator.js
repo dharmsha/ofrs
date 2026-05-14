@@ -75,7 +75,7 @@ export const generatePDF = async (formData) => {
     
     doc.setFontSize(8);
     doc.setFont('helvetica', 'normal');
-    doc.text('GSTIN: 10AAJCV6337M1Z2  |  EMAIL: support@creatorsmind.co.in', infoX, 46);
+    doc.text('GSTIN: 10AAJCV6337M1Z2  |  EMAIL: hr@creatorsmind.co.in', infoX, 46);
 
     return 65; // Next Y Position
   };
